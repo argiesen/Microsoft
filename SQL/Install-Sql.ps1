@@ -1,6 +1,6 @@
-function Install-CsSQLInstance {
+function Install-SQLInstance {
 	param (
-		[ValidateSet("RTCLOCAL", "LYNCLOCAL", "RTC")]
+		[ValidateNotNullOrEmpty()]
 		[string]$Instance,
 		[ValidateNotNullOrEmpty()]
 		[string]$SQLPath = "$env:ProgramFiles\Microsoft SQL Server",
@@ -106,19 +106,14 @@ function Write-Log {
 }
 
 $InstallDrive = "C:"
-$SoftwareDir = "C:\cerium"
+$SoftwareDir = "C:\software"
 $Indent = 1
-$LogOutTo = "FileAndScreen"
 $UserTempDir = [environment]::GetEnvironmentVariable("temp","user")
-$LogPath = "C:\cerium\InstallSQL.txt"
+$LogPath = "C:\software\InstallSQL.txt"
 
-Write-Log "Extracting SQL Express 2014" -OutTo $LogOutTo
+Write-Log "Extracting SQL Express 2014"
 $Process = Start-Process -FilePath "$SoftwareDir\SQLEXPR_x64_ENU.exe" -ArgumentList /q, /x:"$UserTempDir\SQLEXPR_x64_ENU" -Wait -Passthru -Verb RunAs
 if ($process.ExitCode -ne 0){throw "$SoftwareDir\SQLEXPR_x64_ENU.exe /x: returned error code: $($process.ExitCode)"}
 
-Write-Log "Installing RTC" -OutTo $LogOutTo
+#Write-Log "Installing RTC" -OutTo $LogOutTo
 Install-CsSQLInstance -Instance RTC -SQLMediaDir $UserTempDir -SQLPath "$InstallDrive\Program Files\Microsoft SQL Server" -OpenPorts | Out-Null
-#Write-Log "Installing RTCLOCAL" -OutTo $LogOutTo
-#Install-CsSQLInstance -Instance RTCLOCAL -SQLMediaDir $UserTempDir -SQLPath "$InstallDrive\Program Files\Microsoft SQL Server" -OpenPorts | Out-Null
-#Write-Log "Installing LYNCLOCAL" -OutTo $LogOutTo
-#Install-CsSQLInstance -Instance LYNCLOCAL -SQLMediaDir $UserTempDir -SQLPath "$InstallDrive\Program Files\Microsoft SQL Server" | Out-Null
