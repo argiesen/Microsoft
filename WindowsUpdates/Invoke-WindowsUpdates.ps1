@@ -126,7 +126,7 @@ function Manage-ScheduledTask {
 }
 
 #Windows Updates functions
-function Invoke-WindowsUpdates(){
+function Invoke-WindowsUpdates {
 	if (!($UpdateSession)){
 		$UpdateSession = New-Object -ComObject 'Microsoft.Update.Session'
 		$UpdateSession.ClientApplicationID = 'Packer Windows Update Installer'
@@ -238,7 +238,7 @@ function Invoke-WindowsUpdates(){
 	}
 }
 
-$LogPath = "C:\cerium\$($env:ComputerName)-$(Get-Date -f yyyyMMdd).log"
+$LogPath = "C:\$($env:ComputerName)-$(Get-Date -f yyyyMMdd).log"
 
 if (!(Get-ScheduledTask "WindowsUpdates" -ErrorAction SilentlyContinue)){
 	$arg = "-File `"$($MyInvocation.MyCommand.Path)`""
